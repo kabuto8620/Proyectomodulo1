@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Camisetas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="estilos/estilo.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">MENU</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="personalizacon.html">Personalización</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gestion.html">Gestión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1 class="text-center">Gestión de Camisetas Personalizadas</h1>
+
+        <form id="camisetaForm" class="mb-4">
+            <input type="hidden" id="editIndex">
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" class="form-control mb-2" required>
+
+            <label for="numero">Número:</label>
+            <input type="number" id="numero" class="form-control mb-2" required>
+
+            <label for="deporte">Deporte:</label>
+            <select id="deporte" class="form-control mb-2">
+                <option value="Futsal">Futsal</option>
+                <option value="Básquet">Básquet</option>
+                <option value="Wally">Wally</option>
+                <option value="Fútbol Americano">Fútbol Americano</option>
+            </select>
+
+            <label for="material">Material:</label>
+            <select id="material" class="form-control mb-2">
+                <option value="Serigrafiado engomado">Serigrafiado engomado</option>
+                <option value="Pintura clásica">Pintura clásica</option>
+                <option value="Tinta reflectiva">Tinta reflectiva</option>
+            </select>
+
+            <label for="color">Color:</label>
+            <input type="text" id="color" class="form-control mb-2" required>
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Número</th>
+                    <th>Deporte</th>
+                    <th>Material</th>
+                    <th>Color</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaCamisetas"></tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", cargarDatos);
+        document.getElementById("camisetaForm").addEventListener("submit", agregarOEditarCamiseta);
+
+        function cargarDatos() {
+            let camisetas = JSON.parse(localStorage.getItem("camisetas")) || [];
+            const tabla = document.getElementById("tablaCamisetas");
+            tabla.innerHTML = "";
+
+            camisetas.forEach((camiseta, index) => {
+                const fila = `<tr>
+                    <td>${camiseta.nombre}</td>
+                    <td>${camiseta.numero}</td>
+                    <td>${camiseta.deporte}</td>
+                    <td>${camiseta.material}</td>
+                    <td>${camiseta.color}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editarCamiseta(${index})">Editar</button>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarCamiseta(${index})">Eliminar</button>
+                    </td>
+                </tr>`;
+                tabla.innerHTML += fila;
+            });
+        }
+
+        function agregarOEditarCamiseta(event) {
+            event.preventDefault();
+            let camisetas = JSON.parse(localStorage.getItem("camisetas")) || [];
+
+            const nombre = document.getElementById("nombre").value;
+            const numero = document.getElementById("numero").value;
+            const deporte = document.getElementById("deporte").value;
+            const material = document.getElementById("material").value;
+            const color = document.getElementById("color").value;
+            const editIndex = document.getElementById("editIndex").value;
+
+            const nuevaCamiseta = { nombre, numero, deporte, material, color };
+
+            if (editIndex === "") {
+                camisetas.push(nuevaCamiseta);
+            } else {
+                camisetas[editIndex] = nuevaCamiseta;
+                document.getElementById("editIndex").value = "";
+            }
+
+            localStorage.setItem("camisetas", JSON.stringify(camisetas));
+            document.getElementById("camisetaForm").reset();
+            cargarDatos();
+        }
+
+        function editarCamiseta(index) {
+            let camisetas = JSON.parse(localStorage.getItem("camisetas")) || [];
+            const camiseta = camisetas[index];
+
+            document.getElementById("nombre").value = camiseta.nombre;
+            document.getElementById("numero").value = camiseta.numero;
+            document.getElementById("deporte").value = camiseta.deporte;
+            document.getElementById("material").value = camiseta.material;
+            document.getElementById("color").value = camiseta.color;
+            document.getElementById("editIndex").value = index;
+        }
+
+        function eliminarCamiseta(index) {
+            let camisetas = JSON.parse(localStorage.getItem("camisetas")) || [];
+            camisetas.splice(index, 1);
+            localStorage.setItem("camisetas", JSON.stringify(camisetas));
+            cargarDatos();
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+<footer>
+    <h6>2025 - STAMPA2 - Todos los derechos reservados</h6>
+</footer>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+    <item>
+        <nombre>Inicio</nombre>
+        <link>index.html</link>
+    </item>
+    <item>
+        <nombre>Personalizacion</nombre>
+        <link>personalizacon.html</link>
+    </item>
+    <item>
+        <nombre>Tienda</nombre>
+        <link>tienda.html</link>
+    </item>
+    <item>
+        <nombre>Diseñadores</nombre>
+        <link>diseñadores.html</link>
+    </item>
+    <item>
+        <nombre>Galeria</nombre>
+        <link>galeria.html</link>
+    </item>
+</menu>
